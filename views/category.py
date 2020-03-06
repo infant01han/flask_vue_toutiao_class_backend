@@ -17,8 +17,9 @@ def get_all_category(userid):
     print(userid)
     categories = Category.objects()
     print(type(categories))
-    cate_lst = []
-    for obj in categories:
-        tmp = obj.to_public_json()
-        cate_lst.append(tmp)
-    return jsonify(cate_lst)
+    # cate_lst = []
+    # for obj in categories:
+    #     tmp = obj.to_public_json()
+    #     cate_lst.append(tmp)
+    # return jsonify(cate_lst)
+    return jsonify(categories.to_public_jsons())
