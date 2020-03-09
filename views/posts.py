@@ -8,7 +8,7 @@ from flask import request, jsonify
 from mongoengine import ValidationError
 
 from app import app
-from model import User, Post, Cover, Category
+from model import User, Post, Cover, Category,Comment
 from views.auth import login_required
 
 
@@ -20,7 +20,7 @@ def posts_create(userid):
 
     coverLst = []
     for cover in request.json.get('cover'):
-        coverLst.append(cover['id'])
+        coverLst.append(cover['uid'])
 
     Post(
         title=request.json.get("title"),

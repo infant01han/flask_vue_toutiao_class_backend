@@ -7,9 +7,9 @@
 import datetime
 import hashlib
 
-from mongoengine import *
+from  mongoengine import *
 
-connect('yesterday_toutiao')
+connect("yesterday_toutiao")
 
 class CustomQuerySet(QuerySet):
     def to_public_jsons(self):
@@ -32,32 +32,24 @@ class User(Document):
     gender = IntField(required=True)
     user_followed = ListField(ReferenceField("User"))#关注别人
 
-    # meta = {'queryset_class': CustomQuerySet}
-
-
     def to_public_json(self):
         data = {
             "id": str(self.id),
             "username": self.username,
-            # "hashedEmail": hashlib.md5(self.email.encode("utf-8")).hexdigest(),
-            # "created": self.created.strftime("%Y-%m-%d %H:%M:%S"),
             "head_img": self.head_img,
             "gender": self.gender,
         }
 
         return data
+
 class Comment(EmbeddedDocument):
     content = StringField(max_length=5000)
     user = ReferenceField(User)
     created = DateTimeField(required=True, default=datetime.datetime.now())
 
-
-
-
 class Category(Document):
     name = StringField(max_length=120, required=True)
 
-    # meta = {'queryset_class': CustomQuerySet}
     meta = {'queryset_class': CustomQuerySet}
 
     def to_public_json(self):
@@ -71,11 +63,11 @@ class Category(Document):
 class Cover(Document):
     url = StringField(max_length=300, required=True)
 
-    meta = {'queryset_class': CustomQuerySet}
+    # meta = {'queryset_class': CustomQuerySet}
 
     def to_public_json(self):
         data = {
-            "message":"文件上传成功",
+            "message": "文件上传成功",
             "data": {
                 "id": str(self.id),
                 "url": '/file/' + self.url,
@@ -98,13 +90,14 @@ class Post(Document):
     has_star = BooleanField(required=False)
     has_like = BooleanField(required=False)
     has_follow = BooleanField(required=False)
-    # meta = {'queryset_class': CustomQuerySet}
+
+    meta = {'queryset_class': CustomQuerySet}
 
     def to_public_json(self):
         data = {
             "id": str(self.id),
             "title": self.title,
-            "has_star":self.has_star,
+            "has_star": self.has_star,
             "has_like": self.has_like,
             "has_follow": self.has_follow,
             "like_length": len(self.user_agree),
@@ -114,10 +107,10 @@ class Post(Document):
                 "id": str(self.user.id),
                 "nickname": self.user.username
             },
-            "comment_length":len(self.comments),
+            "comment_length": len(self.comments),
 
             "created": self.created.strftime("%Y-%m-%d %H:%M:%S"),
-            "type":self.type,
+            "type": self.type,
             "categories": [{
                 "id": str(category.id),
                 "name": category.name
