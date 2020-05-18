@@ -38,6 +38,7 @@ class User(Document):
             "username": self.username,
             "head_img": self.head_img,
             "gender": self.gender,
+            "created": self.created.strftime("%Y-%m-%d")
         }
 
         return data
