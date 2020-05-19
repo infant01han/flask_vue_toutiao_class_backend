@@ -261,3 +261,13 @@ def post_like(userid, pid):
     except:
         pass
     return jsonify(resp)
+
+@app.route("/api/post_search", methods=["GET"])
+@login_required
+def post_search(userid):
+    keyword = request.args.get("keyword")
+    print(keyword.strip())
+    from mongoengine.queryset.visitor import Q
+    posts = Post.objects(Q(content__icontains=keyword.strip())|Q(title__icontains=keyword.strip()))
+
+    return jsonify(posts.to_public_jsons())
